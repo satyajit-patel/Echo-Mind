@@ -11,7 +11,8 @@ function App() {
     e.preventDefault();
     setAudioUrl(null);
     setIsLoading(true);
-    const api = "http://localhost:3000/api/v1/voice";
+    // const api = "http://localhost:3000/api/v1/voice";
+    const api = `${import.meta.env.VITE_LINK}/api/v1/voice`;
     const response = await axios.post(api, {inputValue}, {responseType: "blob"});
     const url = URL.createObjectURL(response.data);
     setAudioUrl(url);

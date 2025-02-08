@@ -58,6 +58,10 @@ app.post("/api/v1/voice", async (req, res) => {
   }
 });
 
+app.use("/ping", (req, res) => {
+  res.send("pong")
+});
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
