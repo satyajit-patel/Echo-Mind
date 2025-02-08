@@ -7,16 +7,14 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT;
-
 app.use(cors());
 app.use(express.json());
 
-const client = new ElevenLabsClient({
-  apiKey: process.env.ELEVENLABS_API_KEY,
-});
+const port = process.env.PORT;
+const GROQ_API_KEY = process.env.GROQ_API_KEY
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY
 
-const groq = new Groq({apiKey: process.env.GROQ_API_KEY});
+const groq = new Groq({apiKey: GROQ_API_KEY});
 
 async function generateAIResponse(inputValue) {
     try {
@@ -39,12 +37,17 @@ async function generateAIResponse(inputValue) {
     }
 }
 
+const client = new ElevenLabsClient({
+  apiKey: ELEVENLABS_API_KEY,
+});
 
 app.post("/api/v1/voice", async (req, res) => {
   try {
     const {inputValue} = await req.body;
-    const text = await generateAIResponse(inputValue);
-    console.log(text);
+    const text = generateAIResponse(inputValue);
+
+    console.log(port, GROQ_API_KEY, ELEVENLABS_API_KEY, text); // debug
+    
     const audioStream = await client.textToSpeech.convertAsStream("JBFqnCBsd6RMkjVDRZzb", {
       text,
       model_id: "eleven_multilingual_v2",
@@ -60,6 +63,9 @@ app.post("/api/v1/voice", async (req, res) => {
 
 app.use("/ping", (req, res) => {
   res.send("pong")
+});
+app.use("/", (req, res) => {
+  res.send("UP")
 });
 
 app.listen(port, () => {
