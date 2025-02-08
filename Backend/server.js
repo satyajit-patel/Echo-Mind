@@ -48,10 +48,18 @@ app.post("/api/v1/voice", async (req, res) => {
 
     console.log(port, GROQ_API_KEY, ELEVENLABS_API_KEY, text); // debug
     
-    const audioStream = await client.textToSpeech.convertAsStream("JBFqnCBsd6RMkjVDRZzb", {
-      text,
-      model_id: "eleven_multilingual_v2",
-    });
+    const audioStream = await client.textToSpeech.convertAsStream(
+      "JBFqnCBsd6RMkjVDRZzb",
+      {
+        text,
+        model_id: "eleven_multilingual_v2",
+      },
+      {
+        headers: {
+          "xi-api-key": ELEVENLABS_API_KEY,
+        },
+      }
+    );
 
     res.setHeader("Content-Type", "audio/mpeg");
     Readable.from(audioStream).pipe(res);
