@@ -44,7 +44,7 @@ const client = new ElevenLabsClient({
 app.post("/api/v1/voice", async (req, res) => {
   try {
     const {inputValue} = await req.body;
-    const text = generateAIResponse(inputValue);
+    const text = await generateAIResponse(inputValue);
 
     console.log(port, GROQ_API_KEY, ELEVENLABS_API_KEY, text); // debug
     
